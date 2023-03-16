@@ -1,0 +1,108 @@
+function(request) {
+  sidebar <- dashboardSidebar(hr(), sidebarMenu(
+    id = "side",
+    menuItem(
+      "Summary of Applicants",
+      tabName = "summary",
+      icon = icon("pie-chart")), 
+    menuItem(
+      "Selected Graduates",
+      tabName = "selectedGraduate",
+      icon = icon("table") ), 
+    menuItem(
+      "Selected Undergraudates",
+      tabName = "selectedUndergraduate",
+      icon = icon("table") ), 
+    menuItem(
+      "Selected Postdoc",
+      tabName = "selectedPostdoc",
+      icon = icon("table") )
+  ),
+  hr(),
+  conditionalPanel("input.side == 'selectedGraduate'",
+                   fluidRow(
+                     column(1),
+                     column(10,
+                            # h4("Number of awardees"),
+                            sliderInput("number", "Number of awardees", value = 40, min = 1, max=200, step = 1),
+                     )
+                   )
+  ))
+  
+  body <- dashboardBody(tabItems(
+    tabItem(tabName = "summary",
+            fluidRow(
+              column(
+                width = 12,
+                box(
+                  width = 4,
+                  plotlyOutput("Degree"),
+                  solidHeader = TRUE,
+                  status = "primary"
+                ),
+                box(
+                  width = 4,
+                  plotlyOutput("NumGEM"),
+                  solidHeader = TRUE,
+                  status = "primary"
+                ),
+                box(
+                  width = 4,
+                  plotlyOutput("DegreeYears"),
+                  solidHeader = TRUE,
+                  status = "primary"
+                ),
+                # box(
+                #   width = 4,
+                #   plotlyOutput("DegreeYearsOld"),
+                #   solidHeader = TRUE,
+                #   status = "primary"
+                # ),
+                box(
+                  width = 4,
+                  plotlyOutput("NumAdvisor"),
+                  solidHeader = TRUE,
+                  status = "primary"
+                ) 
+              )
+            )),
+    tabItem(tabName = "selectedGraduate",
+            fluidRow(
+              box(
+                width = NULL,
+                status = "primary",
+                solidHeader = TRUE,
+                br(),
+                DT::dataTableOutput("selectedGraduateDf")
+              )
+            ))
+    ,
+    tabItem(tabName = "selectedUndergraduate",
+            fluidRow(
+              box(
+                width = NULL,
+                status = "primary",
+                solidHeader = TRUE,
+                br(),
+                DT::dataTableOutput("selectedUndergraduateDf")
+              )
+            )),
+    tabItem(tabName = "selectedPostdoc",
+            fluidRow(
+              box(
+                width = NULL,
+                status = "primary",
+                solidHeader = TRUE,
+                br(),
+                DT::dataTableOutput("selectedPostdocDf")
+              )
+            ))
+    
+  ))
+  
+  dashboardPage(dashboardHeader(title = "2023 GEM Financial Aid Application"),
+                sidebar,
+                body)
+  
+  
+}

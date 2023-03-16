@@ -1,0 +1,13 @@
+name: gemStudentAidSelection
+title: gemStudentAidSelection
+username:
+account: shihiko
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8510267
+bundleId: 6932805
+url: https://shihiko.shinyapps.io/gemStudentAidSelection/
+when: 1678306435.53416
+lastSyncTime: 1678306435.53419
+asMultiple: FALSE
+asStatic: FALSE
