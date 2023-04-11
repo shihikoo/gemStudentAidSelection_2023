@@ -1,25 +1,24 @@
 shinyServer(function(input, output, session){
   selectedGraduateDf <- reactive({ 
-    selected <-graduateDf[,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep")]
-    selected[1:input$number,"selected"] <- TRUE
-    # selected <-graduateDf[1:input$number,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep")]
-    return(selected)
+    selectedDf <-graduateDf[,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep","randomNumberGenerated")]
+    selectedDf[1:input$number,"selected"] <- TRUE
+    selectedDf <-selectedDf[selectedDf$selected,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep","randomNumberGenerated")]
+    return(selectedDf)
   })
   
   selectedUndergraduateDf <- reactive({ 
     
-    selected <-undergraduateDf[1:5,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep")]
+    selected <-undergraduateDf[1:5,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep","randomNumberGenerated")]
     return(selected)
   })
   
   selectedGPostdocDf <- reactive({ 
-    
-    selected <-postdocDf[1:10,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep")]
+    selected <-postdocDf[1:10,c("student-email","advisor-email" , "student-name","student-affiliation", "student-pronouns","student-degree-program","phd-years",                   "num-workshop","advisor-name","student-pref-roommate","student-accommodations","tutorial", "rep","randomNumberGenerated")]
     return(selected)
   })
   
   advisorDf <- reactive({ 
-    advisorDf <- graduateDf %>% 
+    advisorDf <- combinedDF %>% 
       group_by(`advisor-email`) %>%
       summarise(count = n(), name = first(`advisor-name`))
       })
@@ -59,14 +58,14 @@ shinyServer(function(input, output, session){
   
   #plot ouput:
   output$Degree<-renderPlotly({
-    fig <- plot_ly(graduateDf, labels = ~`student-degree-program`, type = 'pie')
+    fig <- plot_ly(combinedDF, labels = ~`student-degree-program`, type = 'pie')
     fig <- fig %>% layout(title = 'Graduate Student Degree')
     
     fig
   })
   
   output$DegreeYears<-renderPlotly({
-    fig <- plot_ly(graduateDf, labels = ~`phd-years`, type = 'pie')
+    fig <- plot_ly(combinedDF, labels = ~`phd-years`, type = 'pie')
     fig <- fig %>% layout(title = 'Years in Degree')
     
     fig
@@ -85,7 +84,7 @@ shinyServer(function(input, output, session){
   # })
   
   output$NumGEM<-renderPlotly({
-    fig <- plot_ly(graduateDf, labels = ~`num-workshop`, type = 'pie')
+    fig <- plot_ly(combinedDF, labels = ~`num-workshop`, type = 'pie')
     fig <- fig %>% layout(title = 'Number of GEM Attendances ')
 
     fig

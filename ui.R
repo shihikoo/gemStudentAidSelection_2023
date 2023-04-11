@@ -24,7 +24,7 @@ function(request) {
                      column(1),
                      column(10,
                             # h4("Number of awardees"),
-                            sliderInput("number", "Number of awardees", value = 40, min = 1, max=200, step = 1),
+                            sliderInput("number", "Number of awardees", value = 85, min = 1, max = 100, step = 1),
                      )
                    )
   ))

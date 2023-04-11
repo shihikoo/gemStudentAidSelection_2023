@@ -30,6 +30,10 @@ clean_submission_2023 <- function(df2023_submission){
     print("Duplicated entry found.")
     print(df2023_submission[df2023_submission$duplicate, ])
   }
+  df2023_submission$`student-email` <- tolower(df2023_submission$`student-email`)
+  
+  df2023_submission <- df2023_submission[df2023_submission$`student-email` != "efusina@css.edu", ]
+  
   # print(colnames(df2023_submission))
   graduateDf <- df2023_submission[(df2023_submission$`student-degree-program` == "PhD" | df2023_submission$`student-degree-program` == "Master's"), ] 
   
@@ -43,15 +47,25 @@ clean_submission_2023 <- function(df2023_submission){
 }
 
 clean_recommendation_2023 <- function(df2023_recommendation){
+  df2023_recommendation[is.na(df2023_recommendation$status),'status'] <- "Current"
+  df2023_recommendation <- df2023_recommendation[df2023_recommendation$status != "delete",]
+  df2023_recommendation <- df2023_recommendation[!is.na(df2023_recommendation$`student-email`),]
+  
   df2023_recommendation$duplicate <- duplicated(df2023_recommendation$`student-email`)
   if (sum(df2023_recommendation$duplicate) > 0) {
     print("Duplicated entry found.")
     print(df2023_recommendation[df2023_recommendation$duplicate, ])
-  }
+    df2023_recommendation <- df2023_recommendation[!df2023_recommendation$duplicate,]
+    } 
   df2023_recommendation$student_name_recommendation <- df2023_recommendation$`student-name`
   df2023_recommendation$advisor_name_recommendation <- df2023_recommendation$`advisor-name`
+  df2023_recommendation$`student-email` <- tolower(df2023_recommendation$`student-email`)
   
-  return(df2023_recommendation[(df2023_recommendation$status != "delete" | is.na(df2023_recommendation$status)) & df2023_recommendation$recommend == 'yes' & df2023_recommendation$`aware-fee` == 'yes', c('student-email','advisor-email','student_name_recommendation','advisor_name_recommendation','inNeed')])
+  df2023_recommendation <- df2023_recommendation[df2023_recommendation$`student-email` != "efusina@css.edu", ]
+  
+  return(df2023_recommendation[(df2023_recommendation$status != "delete" | is.na(df2023_recommendation$status)) & df2023_recommendation$recommend == 'Yes' 
+                               # & df2023_recommendation$`aware-fee` == 'Yes'
+                               , c('student-email','advisor-email','student_name_recommendation','advisor_name_recommendation','inNeed')])
 }
 
 clean_tutorial_2023 <- function(df2023_tutorial){
@@ -71,11 +85,11 @@ selectionRun <- function(x) {
 addRandomNumber <- function(graduateDf){
   graduateDf$randomNumberGenerated <- sapply(graduateDf$`phd-years`, selectionRun)
   
-  graduateDf$randomNumberGenerated[graduateDf$tutorial == "yes"] = 1
-  graduateDf$randomNumberGenerated[graduateDf$rep == "yes"] = 1
-  graduateDf$randomNumberGenerated[graduateDf$inNeed == "yes"] = 1
+  graduateDf$randomNumberGenerated[graduateDf$tutorial == "Yes"] = 1
+  graduateDf$randomNumberGenerated[graduateDf$rep == "Yes"] = 1
+  graduateDf$randomNumberGenerated[graduateDf$inNeed == "Yes"] = 1
   
-  graduateDf <- graduateDf[order(graduateDf$randomNumberGenerated),]
+  graduateDf <- graduateDf[order(graduateDf$randomNumberGenerated, decreasing = TRUE),]
   return(graduateDf)
 }
 
