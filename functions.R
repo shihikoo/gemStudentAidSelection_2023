@@ -32,7 +32,7 @@ clean_submission_2023 <- function(df2023_submission){
   }
   df2023_submission$`student-email` <- tolower(df2023_submission$`student-email`)
   
-  df2023_submission <- df2023_submission[df2023_submission$`student-email` != "efusina@css.edu", ]
+  # df2023_submission <- df2023_submission[df2023_submission$`student-email` != "efusina@css.edu", ]
   
   # print(colnames(df2023_submission))
   graduateDf <- df2023_submission[(df2023_submission$`student-degree-program` == "PhD" | df2023_submission$`student-degree-program` == "Master's"), ] 
@@ -61,7 +61,7 @@ clean_recommendation_2023 <- function(df2023_recommendation){
   df2023_recommendation$advisor_name_recommendation <- df2023_recommendation$`advisor-name`
   df2023_recommendation$`student-email` <- tolower(df2023_recommendation$`student-email`)
   
-  df2023_recommendation <- df2023_recommendation[df2023_recommendation$`student-email` != "efusina@css.edu", ]
+  # df2023_recommendation <- df2023_recommendation[df2023_recommendation$`student-email` != "efusina@css.edu", ]
   
   return(df2023_recommendation[(df2023_recommendation$status != "delete" | is.na(df2023_recommendation$status)) & df2023_recommendation$recommend == 'Yes' 
                                # & df2023_recommendation$`aware-fee` == 'Yes'
